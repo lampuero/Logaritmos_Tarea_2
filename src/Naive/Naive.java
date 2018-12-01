@@ -11,6 +11,8 @@ public class Naive {
     boolean[] marcado;
     Integer[] prev;
 
+    public Naive(){}
+
     public void inicializar(int n, int origen){
         dist = new int[n];
         marcado = new boolean[n];
@@ -29,7 +31,7 @@ public class Naive {
     public ResultadoDijkstra algoritmoDijkstra(int origen, ArrayList<Pair>[] grafo){
         int n = grafo.length;
         inicializar(n, origen);
-        for (int i = 0; i < n-1; i++){
+        for (int i = 1; i < n; i++){
             int minDist = Integer.MAX_VALUE;
             int minNodo = -1;
 
