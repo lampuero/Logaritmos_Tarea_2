@@ -5,5 +5,6 @@ public class DijkstraWithPriorityQueue {
     static int[] dist;
     static Integer[] prev;
 
-    private
+    private void initialize(){}
+    
 }
