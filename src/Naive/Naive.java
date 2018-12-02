@@ -1,19 +1,16 @@
 package Naive;
 
-import Experimentos.Pair;
-import Experimentos.ResultadoDijkstra;
+import Other.Pair;
+import Other.ResultDijkstra;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Naive {
-    int[] dist;
-    boolean[] marcado;
-    Integer[] prev;
+    private static int[] dist;
+    private static boolean[] marcado;
+    private static Integer[] prev;
 
-    public Naive(){}
-
-    public void inicializar(int n, int origen){
+    private static void initialize(int n, int origen){
         dist = new int[n];
         marcado = new boolean[n];
         prev = new Integer[n];
@@ -28,9 +25,9 @@ public class Naive {
         }
     }
 
-    public ResultadoDijkstra algoritmoDijkstra(int origen, ArrayList<Pair>[] grafo){
+    public static ResultDijkstra algorithmDijkstra(int origen, ArrayList<Pair>[] grafo){
         int n = grafo.length;
-        inicializar(n, origen);
+        initialize(n, origen);
         for (int i = 1; i < n; i++){
             int minDist = Integer.MAX_VALUE;
             int minNodo = -1;
@@ -47,12 +44,12 @@ public class Naive {
 
             //actualizar distancias
             for (Pair pair: grafo[u]) {
-                if (dist[pair.vertice] > dist[u]+pair.distancia){
-                    dist[pair.vertice] = dist[u]+pair.distancia;
-                    prev[pair.vertice] = u;
+                if (dist[pair.getVertice()] > dist[u]+pair.getDistance()){
+                    dist[pair.getVertice()] = dist[u]+pair.getDistance();
+                    prev[pair.getDistance()] = u;
                 }
             }
         }
-        return new ResultadoDijkstra(dist, prev);
+        return new ResultDijkstra(dist, prev);
     }
 }

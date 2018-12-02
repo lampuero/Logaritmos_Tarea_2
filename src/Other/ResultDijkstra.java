@@ -1,10 +1,10 @@
-package Experimentos;
+package Other;
 
-public class ResultadoDijkstra {
+public class ResultDijkstra {
     public int[] distancias;
     public Integer[] camino;
 
-    public ResultadoDijkstra(int[] dist, Integer[] prev){
+    public ResultDijkstra(int[] dist, Integer[] prev){
         this.distancias = dist;
         this.camino = prev;
     }
