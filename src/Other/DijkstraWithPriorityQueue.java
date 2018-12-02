@@ -1,6 +1,6 @@
 package Other;
 
-public class DijkstraWithPriorityQueue {
+public abstract class DijkstraWithPriorityQueue {
     static MyPriorityQueue queue;
     static int[] dist;
     static Integer[] prev;
