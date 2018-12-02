@@ -22,6 +22,6 @@ public class Experiments {
         p.add(new Pair(7,4));
         System.out.println(p);
         System.out.println(p.contains(new Pair(7,37)));
-
+        System.out.println("Chao");
     }
 }
