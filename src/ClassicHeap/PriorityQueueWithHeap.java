@@ -13,15 +13,22 @@ public class PriorityQueueWithHeap extends MyPriorityQueue {
         this.priorities = new ArrayList<>();
     }
 
+    @Override
+    public boolean isEmpty() {
+        return vertices.isEmpty() || priorities.isEmpty();
+    }
+
+    @Override
     public void insert(int vertice, int priority){
         vertices.add(vertice);
         priorities.add(priority);
         verifyUp(vertices.size()-1);
     }
 
-    public Integer extractMinimum(){
+    @Override
+    public int extractMinimum(){
         int n = priorities.size() - 1;
-        Integer minimum = vertices.get(0);
+        int minimum = vertices.get(0);
 
         vertices.set(0, vertices.get(n));
         priorities.set(0, priorities.get(n));
@@ -52,6 +59,7 @@ public class PriorityQueueWithHeap extends MyPriorityQueue {
         return minimum;
     }
 
+    @Override
     public void decreaseKey(int vertice, int newPriority){
         if (vertices.contains(vertice)){
             int index = vertices.indexOf(vertice);
