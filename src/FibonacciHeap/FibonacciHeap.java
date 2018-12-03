@@ -2,6 +2,8 @@ package FibonacciHeap;
 
 import Other.MyPriorityQueue;
 
+import java.util.ArrayList;
+
 public class FibonacciHeap extends MyPriorityQueue {
     Nodo min;
     int n;
@@ -11,7 +13,18 @@ public class FibonacciHeap extends MyPriorityQueue {
         n = 0;
     }
 
-    private void consolidate(){}
+    private void consolidate(){
+        ArrayList<Nodo> array = new ArrayList<>(n+1);
+        for (Nodo n: array) {
+            n = null;
+        }
+        Nodo tmp = min;
+        for (Nodo x = tmp; x.right!=min; x = x.right){
+            int d = x.degree;
+            
+        }
+
+    }
 
     @Override
     public int extractMinimum() {
@@ -43,6 +56,10 @@ public class FibonacciHeap extends MyPriorityQueue {
 
         right.left = left;
         left.right = right;
+
+        if (nodo.parent != null){
+            nodo.parent.degree--;
+        }
     }
 
     private void jointList(Nodo to, Nodo from){
@@ -90,7 +107,7 @@ public class FibonacciHeap extends MyPriorityQueue {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return min == null;
     }
 
     @Override
