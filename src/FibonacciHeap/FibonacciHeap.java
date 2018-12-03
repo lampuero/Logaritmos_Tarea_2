@@ -181,7 +181,28 @@ public class FibonacciHeap extends MyPriorityQueue {
     }
 
     private Nodo search(int vertice){
+        if (min != null){
+            return searchRec(min, vertice);
+        }
         return null;
+    }
+
+    private Nodo searchRec(Nodo nodo, int vertice){
+        if (nodo.vertice == vertice){
+            return nodo;
+        }
+        Nodo tmp = nodo;
+        Nodo res = null;
+        do {
+            if (tmp.vertice == vertice){
+                res = tmp;
+            }
+            else if (tmp.child != null){
+                res = searchRec(tmp.child, vertice);
+            }
+            tmp = tmp.right;
+        } while (tmp != nodo && res == null);
+        return res;
     }
 }
 
