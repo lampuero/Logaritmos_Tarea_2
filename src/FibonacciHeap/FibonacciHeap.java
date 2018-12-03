@@ -15,15 +15,59 @@ public class FibonacciHeap extends MyPriorityQueue {
 
     private void consolidate(){
         ArrayList<Nodo> array = new ArrayList<>(n+1);
-        for (Nodo n: array) {
-            n = null;
+        for (int i = 0; i <= n; i++) {
+            array.add(null);
         }
         Nodo tmp = min;
-        for (Nodo x = tmp; x.right!=min; x = x.right){
+        do {
+            Nodo x = tmp;
             int d = x.degree;
-            
+            while (d<=n && array.get(d) != null){
+                Nodo y = array.get(d);
+                if (x.priority < y.priority){
+                    Nodo a = x;
+                    x = y;
+                    y = a;
+                }
+                link(y, x);
+                array.set(d, null);
+                d++;
+            }
+            array.set(d, x);
+            tmp = tmp.right;
+        } while (tmp != min);
+        min = null;
+        for (int i = 0; i <= n; i++) {
+            if (array.get(i) != null){
+                Nodo a = array.get(i);
+                a.right = a;
+                a.left = a;
+                if (min == null){
+                    min = a;
+                }
+                else {
+                    jointList(min, a);
+                    if (a.priority < min.priority){
+                        min = a;
+                    }
+                }
+            }
         }
+    }
 
+    private void link(Nodo y, Nodo x){
+        removeFromList(y);
+        y.left = y;
+        y.right = y;
+
+        if (x.child != null){
+            jointList(x.child, y);
+        }
+        else {
+            x.child = y;
+        }
+        x.degree++;
+        y.mark = false;
     }
 
     @Override
