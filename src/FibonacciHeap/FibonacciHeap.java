@@ -57,6 +57,7 @@ public class FibonacciHeap extends MyPriorityQueue {
 
     private void link(Nodo y, Nodo x){
         removeFromList(y);
+
         y.left = y;
         y.right = y;
 
@@ -175,9 +176,28 @@ public class FibonacciHeap extends MyPriorityQueue {
     }
 
     private void cascadingCut(Nodo y){
+        Nodo z = y.parent;
+        if (z != null){
+            if (!y.mark){
+                y.mark = true;
+            }
+            else {
+                cut(y, z);
+                cascadingCut(z);
+            }
+        }
     }
 
     private void cut(Nodo x, Nodo y){
+        removeFromList(x);
+        y.degree--;
+
+        x.right = x;
+        x.left = x;
+
+        jointList(min, x);
+        x.parent = null;
+        x.mark = false;
     }
 
     private Nodo search(int vertice){
