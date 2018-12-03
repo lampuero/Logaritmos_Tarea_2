@@ -177,10 +177,10 @@ public class FibonacciHeap extends MyPriorityQueue {
     private void cascadingCut(Nodo y){
     }
 
-    public void cut(Nodo x, Nodo y){
+    private void cut(Nodo x, Nodo y){
     }
 
-    public Nodo search(int vertice){
+    private Nodo search(int vertice){
         return null;
     }
 }
