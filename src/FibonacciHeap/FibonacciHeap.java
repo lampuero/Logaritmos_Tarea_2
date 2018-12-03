@@ -62,6 +62,7 @@ public class FibonacciHeap extends MyPriorityQueue {
 
         if (x.child != null){
             jointList(x.child, y);
+            changeParent(y, x);
         }
         else {
             x.child = y;
@@ -120,10 +121,10 @@ public class FibonacciHeap extends MyPriorityQueue {
     private void changeParent(Nodo child, Nodo newParent){
         Nodo tmp = child;
         tmp.parent = newParent;
-        while (tmp.right != child){
-            tmp = tmp.right;
+        do {
             tmp.parent = newParent;
-        }
+            tmp = tmp.right;
+        } while (tmp.right != child);
     }
 
     @Override
@@ -156,7 +157,31 @@ public class FibonacciHeap extends MyPriorityQueue {
 
     @Override
     public void decreaseKey(int vertice, int newPriority) {
+        Nodo x = search(vertice);
+        if (x.priority < newPriority){
+            System.out.println("Error");
+        }
+        else {
+            x.priority = newPriority;
+            Nodo y = x.parent;
+            if (y != null && x.priority < y.priority){
+                cut(x, y);
+                cascadingCut(y);
+            }
+            if (x.priority < min.priority){
+                min = x;
+            }
+        }
+    }
 
+    private void cascadingCut(Nodo y){
+    }
+
+    public void cut(Nodo x, Nodo y){
+    }
+
+    public Nodo search(int vertice){
+        return null;
     }
 }
 
