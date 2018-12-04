@@ -1,10 +1,8 @@
 package ClassicHeap;
 
-import Other.MyPriorityQueue;
-
 import java.util.ArrayList;
 
-public class PriorityQueueWithHeap extends MyPriorityQueue {
+public class PriorityQueueWithHeap {
     ArrayList<Integer> vertices;
     ArrayList<Integer> priorities;
 
@@ -13,19 +11,16 @@ public class PriorityQueueWithHeap extends MyPriorityQueue {
         this.priorities = new ArrayList<>();
     }
 
-    @Override
     public boolean isEmpty() {
         return vertices.isEmpty() || priorities.isEmpty();
     }
 
-    @Override
     public void insert(int vertice, int priority){
         vertices.add(vertice);
         priorities.add(priority);
         verifyUp(vertices.size()-1);
     }
 
-    @Override
     public int extractMinimum(){
         int n = priorities.size() - 1;
         int minimum = vertices.get(0);
@@ -59,7 +54,6 @@ public class PriorityQueueWithHeap extends MyPriorityQueue {
         return minimum;
     }
 
-    @Override
     public void decreaseKey(int vertice, int newPriority){
         if (vertices.contains(vertice)){
             int index = vertices.indexOf(vertice);
