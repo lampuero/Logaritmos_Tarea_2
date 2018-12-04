@@ -1,250 +1,43 @@
 package FibonacciHeap;
 
-import Other.MyPriorityQueue;
+import Other.Pair;
+import Other.ResultDijkstra;
 
 import java.util.ArrayList;
 
-public class FibonacciHeap extends MyPriorityQueue {
-    Nodo min;
-    int n;
+public class FibonacciHeap {
 
-    public FibonacciHeap(){
-        min = null;
-        n = 0;
-    }
+    private static int[] dist;
+    private static Integer[] prev;
 
-    private void consolidate(){
-        ArrayList<Nodo> array = new ArrayList<>(n+1);
-        for (int i = 0; i <= n; i++) {
-            array.add(null);
-        }
-        Nodo tmp = min;
-        do {
-            Nodo x = tmp;
-            int d = x.degree;
-            while (d<=n && array.get(d) != null){
-                Nodo y = array.get(d);
-                if (x.priority < y.priority){
-                    Nodo a = x;
-                    x = y;
-                    y = a;
-                }
-                link(y, x);
-                array.set(d, null);
-                d++;
-            }
-            array.set(d, x);
-            tmp = tmp.right;
-        } while (tmp != min);
-        min = null;
-        for (int i = 0; i <= n; i++) {
-            if (array.get(i) != null){
-                Nodo a = array.get(i);
-                a.right = a;
-                a.left = a;
-                if (min == null){
-                    min = a;
-                }
-                else {
-                    jointList(min, a);
-                    if (a.priority < min.priority){
-                        min = a;
-                    }
-                }
-            }
-        }
-    }
+    public static ResultDijkstra algorithmDijkstra(int origen, ArrayList<Pair>[] grafo){
+        int n = grafo.length;
+        Nodo[] nodos = new Nodo[n];
+        PriorityQueueWithFibonacciHeap queue = new PriorityQueueWithFibonacciHeap();
 
-    private void link(Nodo y, Nodo x){
-        removeFromList(y);
-
-        y.left = y;
-        y.right = y;
-
-        if (x.child != null){
-            jointList(x.child, y);
-            changeParent(y, x);
-        }
-        else {
-            x.child = y;
-        }
-        x.degree++;
-        y.mark = false;
-    }
-
-    @Override
-    public int extractMinimum() {
-        Nodo z = min;
-        if (z != null){
-            if (z.child != null){
-                changeParent(z.child, null);
-                jointList(z, z.child);
-
-                removeFromList(z);
-
-                if (z == z.right){
-                    min = null;
-                }
-                else {
-                    min = z.right;
-                    consolidate();
-                }
-                n--;
-            }
-            return z.vertice;
-        }
-        return -1;
-    }
-
-    private void removeFromList(Nodo nodo){
-        Nodo right = nodo.right;
-        Nodo left = nodo.left;
-
-        right.left = left;
-        left.right = right;
-
-        if (nodo.parent != null){
-            nodo.parent.degree--;
-        }
-    }
-
-    private void jointList(Nodo to, Nodo from){
-        Nodo toLeft = to.left;
-        Nodo fromRight = from.right;
-
-        to.left = from;
-        toLeft.right = fromRight;
-
-        from.right = to;
-        fromRight.left = toLeft;
-    }
-
-    private void changeParent(Nodo child, Nodo newParent){
-        Nodo tmp = child;
-        tmp.parent = newParent;
-        do {
-            tmp.parent = newParent;
-            tmp = tmp.right;
-        } while (tmp.right != child);
-    }
-
-    @Override
-    public void insert(int vertice, int priority) {
-        Nodo nodo = new Nodo(vertice, priority);
-
-        if (min == null){
-            min = nodo;
-        }
-        else {
-            Nodo left = min.left;
-
-            nodo.right = min;
-            nodo.left = left;
-
-            min.left = nodo;
-            left.right = nodo;
-
-            if (nodo.priority < min.priority){
-                min = nodo;
-            }
-        }
-        n++;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return min == null;
-    }
-
-    @Override
-    public void decreaseKey(int vertice, int newPriority) {
-        Nodo x = search(vertice);
-        if (x.priority < newPriority){
-            System.out.println("Error");
-        }
-        else {
-            x.priority = newPriority;
-            Nodo y = x.parent;
-            if (y != null && x.priority < y.priority){
-                cut(x, y);
-                cascadingCut(y);
-            }
-            if (x.priority < min.priority){
-                min = x;
-            }
-        }
-    }
-
-    private void cascadingCut(Nodo y){
-        Nodo z = y.parent;
-        if (z != null){
-            if (!y.mark){
-                y.mark = true;
+        for (int i = 0; i < n; i++){
+            if (i == origen){
+                dist[i] = 0;
             }
             else {
-                cut(y, z);
-                cascadingCut(z);
+                dist[i] = Integer.MAX_VALUE;
+            }
+            prev[i] = null;
+            nodos[i] = new Nodo(i, dist[i]);
+            queue.insert(nodos[i]);
+        }
+
+        while (!queue.isEmpty()){
+            int m = queue.extractMinimum();
+            for (Pair pair: grafo[m]){
+                int newpriority = dist[m] + pair.getDistance();
+                if (newpriority < dist[pair.getVertice()]){
+                    dist[pair.getVertice()] = newpriority;
+                    prev[pair.getVertice()] = m;
+                    queue.decreaseKey(nodos[pair.getVertice()], newpriority);
+                }
             }
         }
-    }
-
-    private void cut(Nodo x, Nodo y){
-        removeFromList(x);
-        y.degree--;
-
-        x.right = x;
-        x.left = x;
-
-        jointList(min, x);
-        x.parent = null;
-        x.mark = false;
-    }
-
-    private Nodo search(int vertice){
-        if (min != null){
-            return searchRec(min, vertice);
-        }
-        return null;
-    }
-
-    private Nodo searchRec(Nodo nodo, int vertice){
-        if (nodo.vertice == vertice){
-            return nodo;
-        }
-        Nodo tmp = nodo;
-        Nodo res = null;
-        do {
-            if (tmp.vertice == vertice){
-                res = tmp;
-            }
-            else if (tmp.child != null){
-                res = searchRec(tmp.child, vertice);
-            }
-            tmp = tmp.right;
-        } while (tmp != nodo && res == null);
-        return res;
-    }
-}
-
-class Nodo{
-    int degree;
-    Nodo parent;
-    Nodo left, right;
-    Nodo child;
-    boolean mark;
-
-    int priority;
-    int vertice;
-
-    public Nodo(int vertice, int priority){
-        this.vertice = vertice;
-        this.priority = priority;
-
-        degree = 0;
-        parent = null;
-        child = null;
-        left = this;
-        right = this;
-        mark = false;
+        return new ResultDijkstra(dist, prev);
     }
 }
