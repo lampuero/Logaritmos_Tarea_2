@@ -39,7 +39,7 @@ public class Naive {
             for (Pair pair: grafo[u]) {
                 if (dist[pair.getVertice()] > dist[u]+pair.getDistance()){
                     dist[pair.getVertice()] = dist[u]+pair.getDistance();
-                    prev[pair.getDistance()] = u;
+                    prev[pair.getVertice()] = u;
                 }
             }
         }
