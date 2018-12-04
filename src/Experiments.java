@@ -1,27 +1,36 @@
 import Other.Pair;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Experiments {
 
     public static void main(String[] args) {
-	// write your code here
-        System.out.println("Hola");
-        System.out.println(3/2);
-        ArrayList<Integer> a = new ArrayList<>();
-        a.add(10);
-        a.add(11);
-        a.add(12);
-        System.out.println(a);
-        System.out.println(a.get(1));
-        System.out.println(a);
-        System.out.println(a.size());
-        System.out.println(a.contains(11));
-        System.out.println(a.indexOf(12));
-        ArrayList<Pair> p = new ArrayList<>();
-        p.add(new Pair(7,4));
-        System.out.println(p);
-        System.out.println(p.contains(new Pair(7,37)));
-        System.out.println("Chao");
+        Random random = new Random();
+        int n = 10;
+        int e;
+        ArrayList<Pair>[] grafo = new ArrayList[n];
+        for (ArrayList array: grafo) {
+            array = new ArrayList();
+        }
+        for (int i = 0; i < n-1; i++){
+            int d = random.nextInt() + 1;
+            grafo[i].add(new Pair(i+1,d));
+            grafo[i+1].add(new Pair(i, d));
+        }
+        e = 10*n;
+        int c = n-1;
+        while (c < e){
+            int i = random.nextInt(n);
+            int j = random.nextInt(n);
+            int d = random.nextInt() + 1;
+            if (i != j && !grafo[i].contains(new Pair(j,d))){
+                grafo[i].add(new Pair(j,d));
+                grafo[j].add(new Pair(i,d));
+                c++;
+            }
+        }
+        int origin = random.nextInt(n);
+        long startTime = System.currentTimeMillis();
     }
 }
