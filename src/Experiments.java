@@ -1,4 +1,7 @@
+import FibonacciHeap.FibonacciHeap;
+import Naive.Naive;
 import Other.Pair;
+import Other.ResultDijkstra;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -7,11 +10,11 @@ public class Experiments {
 
     public static void main(String[] args) {
         Random random = new Random();
-        int n = 10;
+        int n = 100000;
         int e;
         ArrayList<Pair>[] grafo = new ArrayList[n];
-        for (ArrayList array: grafo) {
-            array = new ArrayList();
+        for (int i = 0; i < n; i++) {
+            grafo[i] = new ArrayList();
         }
         for (int i = 0; i < n-1; i++){
             int d = random.nextInt() + 1;
@@ -31,6 +34,13 @@ public class Experiments {
             }
         }
         int origin = random.nextInt(n);
+        System.out.println("Empezando experimento.");
         long startTime = System.currentTimeMillis();
+        ResultDijkstra res1 = Naive.algorithmDijkstra(origin, grafo);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Termino experimento.");
+        System.out.println(String.format("Naive se demoro %d ms", endTime-startTime));
+        System.out.println(res1.distancias);
+        System.out.println(res1.camino);
     }
 }
