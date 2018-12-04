@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 public class FibonacciHeap {
 
-    private static int[] dist;
-    private static Integer[] prev;
 
     public static ResultDijkstra algorithmDijkstra(int origen, ArrayList<Pair>[] grafo){
         int n = grafo.length;
         Nodo[] nodos = new Nodo[n];
+        int[] dist = new int[n];
+        Integer[] prev = new Integer[n];
         PriorityQueueWithFibonacciHeap queue = new PriorityQueueWithFibonacciHeap();
 
         for (int i = 0; i < n; i++){

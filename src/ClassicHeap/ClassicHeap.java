@@ -11,8 +11,11 @@ public class ClassicHeap {
     private static Integer[] prev;
 
     public static ResultDijkstra algorithmDijkstra(int origen, ArrayList<Pair>[] grafo){
-        PriorityQueueWithHeap queue = new PriorityQueueWithHeap();
         int n = grafo.length;
+        int[] dist = new int[n];
+        Integer[] prev = new Integer[n];
+        PriorityQueueWithHeap queue = new PriorityQueueWithHeap();
+
         for (int i = 0; i < n; i++){
             if (i == origen){
                 dist[i] = 0;
