@@ -3,24 +3,12 @@ package Other;
 import java.io.Serializable;
 
 public class Pair implements Serializable {
-    private Integer vertice;
-    private Integer distance;
+    public int vertice;
+    public int distance;
 
     public Pair(int v, int d){
         this.vertice = v;
         this.distance = d;
-    }
-
-    public int getVertice(){
-        return vertice;
-    }
-
-    public int getDistance(){
-        return distance;
-    }
-
-    public void setDistance(int distance) {
-        this.distance = distance;
     }
 
     @Override
@@ -32,7 +20,7 @@ public class Pair implements Serializable {
             return false;
         }
         Pair otherPair = (Pair) obj;
-        return vertice.equals(otherPair.vertice);
+        return vertice == otherPair.vertice;
     }
 
     @Override

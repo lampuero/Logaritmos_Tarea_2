@@ -30,11 +30,11 @@ public class ClassicHeap {
         while (!queue.isEmpty()){
             int m = queue.extractMinimum();
             for (Pair pair: grafo[m]){
-                int newpriority = dist[m] + pair.getDistance();
-                if (newpriority < dist[pair.getVertice()]){
-                    dist[pair.getVertice()] = newpriority;
-                    prev[pair.getVertice()] = m;
-                    queue.decreaseKey(pair.getVertice(), newpriority);
+                int newpriority = dist[m] + pair.distance;
+                if (newpriority < dist[pair.vertice]){
+                    dist[pair.vertice] = newpriority;
+                    prev[pair.vertice] = m;
+                    queue.decreaseKey(pair.vertice, newpriority);
                 }
             }
         }
