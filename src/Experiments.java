@@ -97,11 +97,20 @@ public class Experiments {
                 all.write("Nº Experimento;Naive;ClassicHeap;FibonacciHeap\n");
                 prom.write("Nº Experimento;Naive;ClassicHeap;FibonacciHeap\n");
                 float[] average = new float[3];
-                float[] total = new float[3];
-                for (int i = 1; i <= experimentos; i++) {
-                    naive.write("");
+                float[] total = {0f,0f,0f};
+                for (int i = 0; i < experimentos; i++) {
+                    naive.write(String.format("%d;%f\n", i+1, tiempoNaive[i]));
+                    classicHeap.write(String.format("%d;%f\n", i+1, tiempoClassicHeap[i]));
+                    fibonacciHeap.write(String.format("%d;%f\n", i+1, tiempoFibonacciHeap[i]));
+                    all.write(String.format("%d;%f;%f;%f\n", i+1, tiempoNaive[i], tiempoClassicHeap[i], tiempoFibonacciHeap[i]));
+                    total[0] += tiempoNaive[i];
+                    total[1] += tiempoClassicHeap[i];
+                    total[2] += tiempoFibonacciHeap[i];
                 }
-
+                for (int i = 0; i < 3; i++) {
+                    average[i] = total[i]/experimentos;
+                }
+                prom.write(String.format("Promedio;%f;%f;%f\n", average[0], average[1], average[2]));
             }
             catch (Exception exc){
                 exc.printStackTrace();
@@ -127,12 +136,7 @@ public class Experiments {
                 catch (Exception exc){
                     exc.printStackTrace();
                 }
-
-
             }
-
         }
-
-
     }
 }
