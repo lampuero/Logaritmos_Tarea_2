@@ -9,125 +9,6 @@ public class PriorityQueueWithFibonacciHeap {
         n = 0;
     }
 
-    private void consolidate(){
-        Nodo[] nodos = new Nodo[n];
-        for (int i = 0; i < n; i++) {
-            nodos[i] = null;
-        }
-        Nodo tmp = min;
-        do {
-            Nodo x = tmp;
-            int d = x.degree;
-            System.out.println(d);
-            System.out.println(x);
-            while (nodos[d] != null){
-                Nodo y = nodos[d];
-                if (x.priority < y.priority){
-                    Nodo a = x;
-                    x = y;
-                    y = a;
-                }
-                link(y, x);
-                nodos[d] = null;
-                d++;
-            }
-            nodos[d] = x;
-            tmp = tmp.right;
-        } while (tmp != min);
-        min = null;
-        for (int i = 0; i < n; i++) {
-            if (nodos[i] != null){
-                Nodo a = nodos[i];
-                a.right = a;
-                a.left = a;
-                if (min == null){
-                    min = a;
-                }
-                else {
-                    jointList(min, a);
-                    if (a.priority < min.priority){
-                        min = a;
-                    }
-                }
-            }
-        }
-    }
-
-    private void link(Nodo y, Nodo x){
-        removeFromList(y);
-
-        if (x.child != null){
-            Nodo right = x.child;
-            Nodo left = right.left;
-
-            y.right = right;
-            y.left = left;
-
-            right.left = y;
-            left.right = y;
-        }
-        else {
-            x.child = y;
-
-        }
-        y.parent = x;
-        x.degree++;
-        y.mark = false;
-    }
-
-    public int extractMinimum() {
-        Nodo z = min;
-        if (z != null){
-            if (z.child != null){
-                nullParent(z.child);
-                jointList(z, z.child);
-            }
-            removeFromList(z);
-
-            if (z == z.right){
-                min = null;
-            }
-            else {
-                min = z.right;
-                consolidate();
-            }
-            n--;
-            return z.vertice;
-        }
-        return -1;
-    }
-
-    private void removeFromList(Nodo nodo){
-        Nodo right = nodo.right;
-        Nodo left = nodo.left;
-
-        right.left = left;
-        left.right = right;
-
-        if (nodo.parent != null){
-            nodo.parent.degree--;
-        }
-    }
-
-    private void jointList(Nodo to, Nodo from){
-        Nodo toLeft = to.left;
-        Nodo fromRight = from.right;
-
-        to.left = from;
-        toLeft.right = fromRight;
-
-        from.right = to;
-        fromRight.left = toLeft;
-    }
-
-    private void nullParent(Nodo child){
-        Nodo tmp = child;
-        do {
-            tmp.parent = null;
-            tmp = tmp.right;
-        } while (tmp != child);
-    }
-
     public void insert(Nodo nodo) {
         if (min == null){
             min = nodo;
@@ -147,6 +28,133 @@ public class PriorityQueueWithFibonacciHeap {
         }
         n++;
     }
+
+    public int extractMinimum() {
+        Nodo z = min;
+        if (z != null){
+            if (z.child != null){
+                nullParent(z.child);
+                jointMinList(z.child);
+            }
+            Nodo right = z.right;
+            Nodo left = z.left;
+            right.left = left;
+            left.right = right;
+
+            if (z == z.right){
+                min = null;
+            }
+            else {
+                min = z.right;
+                consolidate();
+            }
+            n--;
+            return z.vertice;
+        }
+        return -1;
+    }
+
+    private void consolidate(){
+        Nodo[] nodos = new Nodo[n];
+        for (int i = 0; i < n; i++) {
+            nodos[i] = null;
+        }
+
+        Nodo tmp = min;
+        Nodo stop = min.left;
+        boolean coverAll = false;
+        do {
+            if (tmp == stop){
+                coverAll = true;
+            }
+            Nodo x = tmp;
+            tmp = tmp.right;
+            int d = x.degree;
+
+            Nodo right = x.right;
+            Nodo left = x.left;
+            right.left = left;
+            left.right = right;
+            x.right = x;
+            x.left = x;
+
+            while (nodos[d] != null){
+                Nodo y = nodos[d];
+                if (x.priority > y.priority){
+                    Nodo a = x;
+                    x = y;
+                    y = a;
+                }
+                link(y, x);
+                nodos[d] = null;
+                d++;
+            }
+            nodos[d] = x;
+        } while (!coverAll);
+        min = null;
+        for (int i = 0; i < n; i++) {
+            if (nodos[i] != null){
+                Nodo a = nodos[i];
+                a.right = a;
+                a.left = a;
+                if (min == null){
+                    min = a;
+                }
+                else {
+                    jointMinList(a);
+                    if (a.priority < min.priority){
+                        min = a;
+                    }
+                }
+            }
+        }
+    }
+
+    private void link(Nodo y, Nodo x){
+        Nodo right = y.right;
+        Nodo left = y.left;
+        right.left = left;
+        left.right = right;
+
+        if (x.child != null){
+            right = x.child;
+            left = right.left;
+
+            y.right = right;
+            y.left = left;
+
+            right.left = y;
+            left.right = y;
+        }
+        else {
+            x.child = y;
+
+        }
+        y.parent = x;
+        x.degree++;
+        y.mark = false;
+    }
+
+    private void jointMinList(Nodo from){
+        Nodo minLeft = min.left;
+        Nodo fromRight = from.right;
+
+        min.left = from;
+        minLeft.right = fromRight;
+
+        from.right = min;
+        fromRight.left = minLeft;
+    }
+
+    private void nullParent(Nodo child){
+        Nodo tmp = child;
+        do {
+            tmp.parent = null;
+            tmp = tmp.right;
+        } while (tmp != child);
+    }
+
+
 
     public boolean isEmpty() {
         return min == null;
@@ -183,13 +191,24 @@ public class PriorityQueueWithFibonacciHeap {
     }
 
     private void cut(Nodo x, Nodo y){
-        removeFromList(x);
+        if (y.child == x){
+            if (y.degree > 1){
+                y.child = x.right;
+            }
+            else {
+                y.child = null;
+            }
+        }
+        Nodo right = x.right;
+        Nodo left = x.left;
+        right.left = left;
+        left.right = right;
         y.degree--;
 
         x.right = x;
         x.left = x;
 
-        jointList(min, x);
+        jointMinList(x);
         x.parent = null;
         x.mark = false;
     }
