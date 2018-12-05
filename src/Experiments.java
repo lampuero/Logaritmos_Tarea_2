@@ -16,6 +16,7 @@ public class Experiments {
         int n = 100000;
         int[] muls = {10, 100, 1000};
         for (int m = 0; m < 3; m++){
+            System.out.printf("Empiezo con %dn\n", muls[m]);
             int e = muls[m]*n;
             ArrayList<Pair>[] grafo = new ArrayList[n];
             for (int i = 0; i < n; i++) {
@@ -39,24 +40,16 @@ public class Experiments {
             }
             int origin = random.nextInt(n);
             System.out.printf("Origen %d%n", origin);
-            System.out.println("Empezando calentamiento.");
-            for (int i = 0; i < 5 ; i++) {
-                ResultDijkstra res1 = Naive.algorithmDijkstra(origin, grafo);
-                ResultDijkstra res2 = ClassicHeap.algorithmDijkstra(origin, grafo);
-                ResultDijkstra res3 = FibonacciHeap.algorithmDijkstra(origin, grafo);
-                if (res1.equals(res2) && res2.equals(res3)){
-                    System.out.println("Todo bien con los algoritmos.");
-                }
-                else {
-                    System.out.println("Algo salio mal.");
-                }
-            }
-            System.out.println("Termino calentamiento.");
             System.out.println("Empezando experimentos.");
             int experimentos = 20;
             float[] tiempoNaive = new float[experimentos];
             float[] tiempoClassicHeap = new float[experimentos];
             float[] tiempoFibonacciHeap = new float[experimentos];
+            System.out.println("Empezando calentamiento para implementacion Naive.");
+            for (int i = 0; i < 3 ; i++) {
+                ResultDijkstra res = Naive.algorithmDijkstra(origin, grafo);
+            }
+            System.out.println("Termino calentamiento.");
             System.out.println("Empezando experimentos con implementacion Naive.");
             for (int i = 0; i < experimentos ; i++) {
                 long startTime = System.currentTimeMillis();
@@ -64,6 +57,12 @@ public class Experiments {
                 long endTime = System.currentTimeMillis();
                 tiempoNaive[i] = (endTime - startTime)/1000f;
             }
+
+            System.out.println("Empezando calentamiento para Classic Heap.");
+            for (int i = 0; i < 3 ; i++) {
+                ResultDijkstra res = ClassicHeap.algorithmDijkstra(origin, grafo);
+            }
+            System.out.println("Termino calentamiento.");
             System.out.println("Empezando experimentos con Classic Heap.");
             for (int i = 0; i < experimentos ; i++) {
                 long startTime = System.currentTimeMillis();
@@ -71,6 +70,12 @@ public class Experiments {
                 long endTime = System.currentTimeMillis();
                 tiempoClassicHeap[i] = (endTime - startTime)/1000f;
             }
+
+            System.out.println("Empezando calentamiento para Fibonacci Heap.");
+            for (int i = 0; i < 3 ; i++) {
+                ResultDijkstra res = FibonacciHeap.algorithmDijkstra(origin, grafo);
+            }
+            System.out.println("Termino calentamiento.");
             System.out.println("Empezando experimentos con Fibonacci Heap.");
             for (int i = 0; i < experimentos ; i++) {
                 long startTime = System.currentTimeMillis();
@@ -79,17 +84,18 @@ public class Experiments {
                 tiempoFibonacciHeap[i] = (endTime - startTime)/1000f;
             }
             System.out.println("Terminaron los experimentos.");
+            System.out.println("Empiezo a escribir los resultados.");
             BufferedWriter naive = null;
             BufferedWriter classicHeap = null;
             BufferedWriter fibonacciHeap = null;
             BufferedWriter all = null;
             BufferedWriter prom = null;
             try {
-                naive = new BufferedWriter(new FileWriter(String.format("Resultados Naive con %d*n aristas.csv", muls[m])));
-                classicHeap = new BufferedWriter(new FileWriter(String.format("Resultados Heap con %d*n aristas.csv", muls[m])));
-                fibonacciHeap = new BufferedWriter(new FileWriter(String.format("Resultados fibonacci Heap con %d*n aristas.csv", muls[m])));
-                all = new BufferedWriter(new FileWriter(String.format("Todos los resultados con %d*n aristas.csv", muls[m])));
-                prom = new BufferedWriter(new FileWriter(String.format("Resultados promedio con %d*n aristas.csv", muls[m])));
+                naive = new BufferedWriter(new FileWriter(String.format("Resultados Naive con %dn aristas.csv", muls[m])));
+                classicHeap = new BufferedWriter(new FileWriter(String.format("Resultados Heap con %dn aristas.csv", muls[m])));
+                fibonacciHeap = new BufferedWriter(new FileWriter(String.format("Resultados fibonacci Heap con %dn aristas.csv", muls[m])));
+                all = new BufferedWriter(new FileWriter(String.format("Todos los resultados con %dn aristas.csv", muls[m])));
+                prom = new BufferedWriter(new FileWriter(String.format("Resultados promedio con %dn aristas.csv", muls[m])));
 
                 naive.write("Nº Experimento;Naive\n");
                 classicHeap.write("Nº Experimento;ClassicHeap\n");
@@ -111,6 +117,8 @@ public class Experiments {
                     average[i] = total[i]/experimentos;
                 }
                 prom.write(String.format("Promedio;%f;%f;%f\n", average[0], average[1], average[2]));
+
+                System.out.printf("Termino de escribir los resultados para %dn\n.", muls[m]);
             }
             catch (Exception exc){
                 exc.printStackTrace();
