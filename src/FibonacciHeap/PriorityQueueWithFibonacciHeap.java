@@ -18,7 +18,9 @@ public class PriorityQueueWithFibonacciHeap {
         do {
             Nodo x = tmp;
             int d = x.degree;
-            while (d<=n && nodos[d] != null){
+            System.out.println(d);
+            System.out.println(x);
+            while (nodos[d] != null){
                 Nodo y = nodos[d];
                 if (x.priority < y.priority){
                     Nodo a = x;
@@ -54,16 +56,21 @@ public class PriorityQueueWithFibonacciHeap {
     private void link(Nodo y, Nodo x){
         removeFromList(y);
 
-        y.left = y;
-        y.right = y;
-
         if (x.child != null){
-            jointList(x.child, y);
-            changeParent(y, x);
+            Nodo right = x.child;
+            Nodo left = right.left;
+
+            y.right = right;
+            y.left = left;
+
+            right.left = y;
+            left.right = y;
         }
         else {
             x.child = y;
+
         }
+        y.parent = x;
         x.degree++;
         y.mark = false;
     }
@@ -72,20 +79,19 @@ public class PriorityQueueWithFibonacciHeap {
         Nodo z = min;
         if (z != null){
             if (z.child != null){
-                changeParent(z.child, null);
+                nullParent(z.child);
                 jointList(z, z.child);
-
-                removeFromList(z);
-
-                if (z == z.right){
-                    min = null;
-                }
-                else {
-                    min = z.right;
-                    consolidate();
-                }
-                n--;
             }
+            removeFromList(z);
+
+            if (z == z.right){
+                min = null;
+            }
+            else {
+                min = z.right;
+                consolidate();
+            }
+            n--;
             return z.vertice;
         }
         return -1;
@@ -114,13 +120,12 @@ public class PriorityQueueWithFibonacciHeap {
         fromRight.left = toLeft;
     }
 
-    private void changeParent(Nodo child, Nodo newParent){
+    private void nullParent(Nodo child){
         Nodo tmp = child;
-        tmp.parent = newParent;
         do {
-            tmp.parent = newParent;
+            tmp.parent = null;
             tmp = tmp.right;
-        } while (tmp.right != child);
+        } while (tmp != child);
     }
 
     public void insert(Nodo nodo) {
@@ -210,5 +215,10 @@ class Nodo{
         left = this;
         right = this;
         mark = false;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%d,%d)", vertice, priority);
     }
 }

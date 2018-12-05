@@ -29,12 +29,14 @@ public class FibonacciHeap {
 
         while (!queue.isEmpty()){
             int m = queue.extractMinimum();
+            System.out.println(m);
+            System.out.println(nodos[m]);
             for (Pair pair: grafo[m]){
-                int newpriority = dist[m] + pair.getDistance();
-                if (newpriority < dist[pair.getVertice()]){
-                    dist[pair.getVertice()] = newpriority;
-                    prev[pair.getVertice()] = m;
-                    queue.decreaseKey(nodos[pair.getVertice()], newpriority);
+                int newpriority = dist[m] + pair.distance;
+                if (newpriority < dist[pair.vertice]){
+                    dist[pair.vertice] = newpriority;
+                    prev[pair.vertice] = m;
+                    queue.decreaseKey(nodos[pair.vertice], newpriority);
                 }
             }
         }
