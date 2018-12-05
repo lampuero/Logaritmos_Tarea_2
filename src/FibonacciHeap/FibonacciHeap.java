@@ -29,8 +29,6 @@ public class FibonacciHeap {
 
         while (!queue.isEmpty()){
             int m = queue.extractMinimum();
-            System.out.println(m);
-            System.out.println(nodos[m]);
             for (Pair pair: grafo[m]){
                 int newpriority = dist[m] + pair.distance;
                 if (newpriority < dist[pair.vertice]){
