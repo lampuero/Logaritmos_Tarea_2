@@ -14,8 +14,8 @@ public class Experiments {
     public static void main(String[] args) {
         Random random = new Random();
         int n = 100000;
-        int[] muls = {10, 100, 1000};
-        for (int m = 0; m < 3; m++){
+        int[] muls = {10, 100};
+        for (int m = 0; m < muls.length; m++){
             System.out.printf("Empiezo con %dn\n", muls[m]);
             int e = muls[m]*n;
             ArrayList<Pair>[] grafo = new ArrayList[n];
