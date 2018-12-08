@@ -13,9 +13,11 @@ public class PriorityQueueWithHeap {
         return elements.isEmpty();
     }
 
-    public void insert(int vertice, int priority){
-        elements.add(new Element(vertice, priority));
-        verifyUp(elements.size()-1);
+    public void insert(Element element){
+        int n = elements.size();
+        elements.add(element);
+        element.index = n;
+        verifyUp(n);
     }
 
     public int extractMinimum(){
@@ -23,6 +25,7 @@ public class PriorityQueueWithHeap {
         Element minimum = elements.get(0);
 
         elements.set(0, elements.get(n));
+        elements.get(0).index = 0;
 
         elements.remove(n);
 
@@ -38,28 +41,32 @@ public class PriorityQueueWithHeap {
             Element tmp = elements.get(i);
 
             elements.set(i, elements.get(k));
+            elements.get(i).index = i;
 
             elements.set(k, tmp);
+            elements.get(k).index = k;
 
             i = k;
         }
         return minimum.vertex;
     }
 
-    public void decreaseKey(int vertice, int newPriority){
-        int index = elements.indexOf(new Element(vertice, 0));
-        Element tmp = elements.get(index);
-        tmp.priority = newPriority;
+    public void decreaseKey(Element element, int newPriority){
+        int index = element.index;
+        element.priority = newPriority;
         verifyUp(index);
     }
 
     private void verifyUp(int index){
         for (int i = index; i>0 && elements.get(i).priority < elements.get((i-1)/2).priority; i = (i-1)/2){
             Element tmp = elements.get(i);
+            int j = (i-1)/2;
 
-            elements.set(i, elements.get((i-1)/2));
+            elements.set(i, elements.get(j));
+            elements.get(i).index = i;
 
-            elements.set((i-1)/2, tmp);
+            elements.set(j, tmp);
+            elements.get(j).index = j;
         }
     }
 }
@@ -67,10 +74,12 @@ public class PriorityQueueWithHeap {
 class Element{
     int vertex;
     int priority;
+    int index;
 
     public Element(int vertex, int priority){
         this.vertex = vertex;
         this.priority = priority;
+        this.index = 0;
     }
 
     @Override
