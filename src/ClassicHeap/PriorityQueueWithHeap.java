@@ -3,75 +3,92 @@ package ClassicHeap;
 import java.util.ArrayList;
 
 public class PriorityQueueWithHeap {
-    ArrayList<Integer> vertices;
-    ArrayList<Integer> priorities;
+    ArrayList<Element> elements;
 
     public PriorityQueueWithHeap(){
-        this.vertices = new ArrayList<>();
-        this.priorities = new ArrayList<>();
+        this.elements = new ArrayList<>();
     }
 
     public boolean isEmpty() {
-        return vertices.isEmpty() || priorities.isEmpty();
+        return elements.isEmpty();
     }
 
     public void insert(int vertice, int priority){
-        vertices.add(vertice);
-        priorities.add(priority);
-        verifyUp(vertices.size()-1);
+        elements.add(new Element(vertice, priority));
+        verifyUp(elements.size()-1);
     }
 
     public int extractMinimum(){
-        int n = priorities.size() - 1;
-        int minimum = vertices.get(0);
+        int n = elements.size() - 1;
+        Element minimum = elements.get(0);
 
-        vertices.set(0, vertices.get(n));
-        priorities.set(0, priorities.get(n));
+        elements.set(0, elements.get(n));
 
-        vertices.remove(n);
-        priorities.remove(n);
+        elements.remove(n);
 
         int i = 0;
         while (2*i+1 < n){
             int k = 2*i + 1;
-            if (k+1 < n && priorities.get(k+1) < priorities.get(k)){
+            if (k+1 < n && elements.get(k+1).priority < elements.get(k).priority){
                 k++;
             }
-            if (priorities.get(i) < priorities.get(k)){
+            if (elements.get(i).priority < elements.get(k).priority){
                 break;
             }
-            Integer temporaryVertice = vertices.get(i);
-            Integer temporaryPriority = priorities.get(i);
+            Element tmp = elements.get(i);
 
-            vertices.set(i, vertices.get(k));
-            priorities.set(i, priorities.get(k));
+            elements.set(i, elements.get(k));
 
-            vertices.set(k, temporaryVertice);
-            priorities.set(k, temporaryPriority);
+            elements.set(k, tmp);
 
             i = k;
         }
-        return minimum;
+        return minimum.vertex;
     }
 
     public void decreaseKey(int vertice, int newPriority){
-        if (vertices.contains(vertice)){
-            int index = vertices.indexOf(vertice);
-            priorities.set(index, newPriority);
-            verifyUp(index);
-        }
+        int index = elements.indexOf(new Element(vertice, 0));
+        Element tmp = elements.get(index);
+        tmp.priority = newPriority;
+        verifyUp(index);
     }
 
     private void verifyUp(int index){
-        for (int i = index; i>0 && priorities.get(i) < priorities.get((i-1)/2); i = (i-1)/2){
-            Integer temporaryVertice = vertices.get(i);
-            Integer temporaryPriority = priorities.get(i);
+        for (int i = index; i>0 && elements.get(i).priority < elements.get((i-1)/2).priority; i = (i-1)/2){
+            Element tmp = elements.get(i);
 
-            vertices.set(i, vertices.get((i-1)/2));
-            priorities.set(i, priorities.get((i-1)/2));
+            elements.set(i, elements.get((i-1)/2));
 
-            vertices.set((i-1)/2, temporaryVertice);
-            priorities.set((i-1)/2, temporaryPriority);
+            elements.set((i-1)/2, tmp);
         }
+    }
+}
+
+class Element{
+    int vertex;
+    int priority;
+
+    public Element(int vertex, int priority){
+        this.vertex = vertex;
+        this.priority = priority;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Element)) {
+            return false;
+        }
+        Element otherElement = (Element) obj;
+        return vertex == otherElement.vertex;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + vertex;
+        return result;
     }
 }
