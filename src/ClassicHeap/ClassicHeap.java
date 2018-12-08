@@ -9,6 +9,7 @@ public class ClassicHeap {
 
     public static ResultDijkstra algorithmDijkstra(int origen, ArrayList<Pair>[] grafo){
         int n = grafo.length;
+        Element[] elements = new Element[n];
         int[] dist = new int[n];
         Integer[] prev = new Integer[n];
         PriorityQueueWithHeap queue = new PriorityQueueWithHeap();
@@ -21,17 +22,18 @@ public class ClassicHeap {
                 dist[i] = Integer.MAX_VALUE;
             }
             prev[i] = null;
-            queue.insert(i, dist[i]);
+            elements[i] = new Element(i, dist[i]);
+            queue.insert(elements[i]);
         }
 
         while (!queue.isEmpty()){
             int m = queue.extractMinimum();
             for (Pair pair: grafo[m]){
-                int newpriority = dist[m] + pair.distance;
-                if (newpriority < dist[pair.vertice]){
-                    dist[pair.vertice] = newpriority;
+                int newPriority = dist[m] + pair.distance;
+                if (newPriority < dist[pair.vertice]){
+                    dist[pair.vertice] = newPriority;
                     prev[pair.vertice] = m;
-                    queue.decreaseKey(pair.vertice, newpriority);
+                    queue.decreaseKey(elements[pair.vertice], newPriority);
                 }
             }
         }
