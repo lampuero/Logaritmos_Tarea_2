@@ -7,9 +7,6 @@ import java.util.ArrayList;
 
 public class ClassicHeap {
 
-    private static int[] dist;
-    private static Integer[] prev;
-
     public static ResultDijkstra algorithmDijkstra(int origen, ArrayList<Pair>[] grafo){
         int n = grafo.length;
         int[] dist = new int[n];
