@@ -12,6 +12,7 @@ import java.util.Random;
 public class Experiments {
 
     public static void main(String[] args) {
+        long startProgram = System.currentTimeMillis();
         Random random = new Random();
         int n = 100000;
         int[] muls = {10, 100};
@@ -105,10 +106,10 @@ public class Experiments {
                 float[] average = new float[3];
                 float[] total = {0f,0f,0f};
                 for (int i = 0; i < experimentos; i++) {
-                    naive.write(String.format("%d;%f\n", i+1, tiempoNaive[i]));
-                    classicHeap.write(String.format("%d;%f\n", i+1, tiempoClassicHeap[i]));
-                    fibonacciHeap.write(String.format("%d;%f\n", i+1, tiempoFibonacciHeap[i]));
-                    all.write(String.format("%d;%f;%f;%f\n", i+1, tiempoNaive[i], tiempoClassicHeap[i], tiempoFibonacciHeap[i]));
+                    naive.write(String.format("%d;%.3f\n", i+1, tiempoNaive[i]));
+                    classicHeap.write(String.format("%d;%.3f\n", i+1, tiempoClassicHeap[i]));
+                    fibonacciHeap.write(String.format("%d;%.3f\n", i+1, tiempoFibonacciHeap[i]));
+                    all.write(String.format("%d;%.3f;%.3f;%.3f\n", i+1, tiempoNaive[i], tiempoClassicHeap[i], tiempoFibonacciHeap[i]));
                     total[0] += tiempoNaive[i];
                     total[1] += tiempoClassicHeap[i];
                     total[2] += tiempoFibonacciHeap[i];
@@ -116,7 +117,7 @@ public class Experiments {
                 for (int i = 0; i < 3; i++) {
                     average[i] = total[i]/experimentos;
                 }
-                prom.write(String.format("Promedio;%f;%f;%f\n", average[0], average[1], average[2]));
+                prom.write(String.format("Promedio;%.3f;%.3f;%.3f\n", average[0], average[1], average[2]));
 
                 System.out.printf("Termino de escribir los resultados para %dn\n.", muls[m]);
             }
@@ -146,5 +147,6 @@ public class Experiments {
                 }
             }
         }
+        System.out.printf("duracion del programa fue %.3f s", (System.currentTimeMillis()-startProgram)/1000f);
     }
 }
