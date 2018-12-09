@@ -16,9 +16,9 @@ public class Experiments {
         Random random = new Random();
         int n = 100000;
         int[] muls = {10, 100};
-        for (int m = 0; m < muls.length; m++){
-            System.out.printf("Empiezo con %dn\n", muls[m]);
-            int e = muls[m]*n;
+        for (int mul: muls){
+            System.out.printf("Empiezo con %dn\n", mul);
+            int e = mul*n;
             ArrayList<Pair>[] grafo = new ArrayList[n];
             for (int i = 0; i < n; i++) {
                 grafo[i] = new ArrayList<>();
@@ -92,11 +92,11 @@ public class Experiments {
             BufferedWriter all = null;
             BufferedWriter prom = null;
             try {
-                naive = new BufferedWriter(new FileWriter(String.format("Resultados Naive con %dn aristas.csv", muls[m])));
-                classicHeap = new BufferedWriter(new FileWriter(String.format("Resultados Heap con %dn aristas.csv", muls[m])));
-                fibonacciHeap = new BufferedWriter(new FileWriter(String.format("Resultados fibonacci Heap con %dn aristas.csv", muls[m])));
-                all = new BufferedWriter(new FileWriter(String.format("Todos los resultados con %dn aristas.csv", muls[m])));
-                prom = new BufferedWriter(new FileWriter(String.format("Resultados promedio con %dn aristas.csv", muls[m])));
+                naive = new BufferedWriter(new FileWriter(String.format("Resultados Naive con %dn aristas.csv", mul)));
+                classicHeap = new BufferedWriter(new FileWriter(String.format("Resultados Heap con %dn aristas.csv", mul)));
+                fibonacciHeap = new BufferedWriter(new FileWriter(String.format("Resultados fibonacci Heap con %dn aristas.csv", mul)));
+                all = new BufferedWriter(new FileWriter(String.format("Todos los resultados con %dn aristas.csv", mul)));
+                prom = new BufferedWriter(new FileWriter(String.format("Resultados promedio con %dn aristas.csv", mul)));
 
                 naive.write("Nº Experimento;Naive\n");
                 classicHeap.write("Nº Experimento;ClassicHeap\n");
@@ -119,7 +119,7 @@ public class Experiments {
                 }
                 prom.write(String.format("Promedio;%.3f;%.3f;%.3f\n", average[0], average[1], average[2]));
 
-                System.out.printf("Termino de escribir los resultados para %dn\n.", muls[m]);
+                System.out.printf("Termino de escribir los resultados para %dn\n.", mul);
             }
             catch (Exception exc){
                 exc.printStackTrace();
