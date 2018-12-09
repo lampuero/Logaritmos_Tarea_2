@@ -1,85 +1,85 @@
 package ClassicHeap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PriorityQueueWithHeap {
-    ArrayList<Element> elements;
+    Element[] elements;
+    Map<Integer,Integer> indexOf;
+    int lastIndex;
 
-    public PriorityQueueWithHeap(){
-        this.elements = new ArrayList<>();
+    public PriorityQueueWithHeap(int lenghtArray){
+        this.elements = new Element[lenghtArray];
+        this.lastIndex = -1;
+        this.indexOf = new HashMap<>();
     }
 
     public boolean isEmpty() {
-        return elements.isEmpty();
+        return lastIndex < 0;
     }
 
-    public void insert(Element element){
-        int n = elements.size();
-        elements.add(element);
-        element.index = n;
-        verifyUp(n);
+    public void insert(int vertice, int priority){
+        lastIndex++;
+        elements[lastIndex] = new Element(vertice, priority);
+        indexOf.put(vertice, lastIndex);
+        verifyUp(lastIndex);
     }
 
     public int extractMinimum(){
-        int n = elements.size() - 1;
-        Element minimum = elements.get(0);
-
-        elements.set(0, elements.get(n));
-        elements.get(0).index = 0;
-
-        elements.remove(n);
-
+        int n = lastIndex;
+        Element minimum = elements[0];
+        swap(0, lastIndex);
+        elements[lastIndex] = null;
+        lastIndex--;
         int i = 0;
         while (2*i+1 < n){
             int k = 2*i + 1;
-            if (k+1 < n && elements.get(k+1).priority < elements.get(k).priority){
+            if (k+1 < n && elements[k+1].priority < elements[k].priority){
                 k++;
             }
-            if (elements.get(i).priority < elements.get(k).priority){
+            if (elements[i].priority < elements[k].priority){
                 break;
             }
-            Element tmp = elements.get(i);
 
-            elements.set(i, elements.get(k));
-            elements.get(i).index = i;
-
-            elements.set(k, tmp);
-            elements.get(k).index = k;
+            swap(i, k);
 
             i = k;
         }
         return minimum.vertex;
     }
 
-    public void decreaseKey(Element element, int newPriority){
-        int index = element.index;
-        element.priority = newPriority;
-        verifyUp(index);
+    public void decreaseKey(int vertice, int newPriority){
+        int index = indexOf.get(vertice);
+        if (newPriority < elements[index].priority){
+            elements[index].priority = newPriority;
+            verifyUp(index);
+        }
     }
 
     private void verifyUp(int index){
-        for (int i = index; i>0 && elements.get(i).priority < elements.get((i-1)/2).priority; i = (i-1)/2){
-            Element tmp = elements.get(i);
-            int j = (i-1)/2;
-
-            elements.set(i, elements.get(j));
-            elements.get(i).index = i;
-
-            elements.set(j, tmp);
-            elements.get(j).index = j;
+        for (int i = index; i>0 && elements[i].priority < elements[(i-1)/2].priority; i = (i-1)/2){
+            swap((i-1)/2, i);
         }
+    }
+
+    private void swap(int index, int otherIndex){
+        Element tmp = elements[index];
+        elements[index] = elements[otherIndex];
+        elements[otherIndex] = tmp;
+
+        indexOf.put(elements[index].vertex, index);
+        indexOf.put(elements[otherIndex].vertex, otherIndex);
     }
 }
 
 class Element{
     int vertex;
     int priority;
-    int index;
 
     public Element(int vertex, int priority){
         this.vertex = vertex;
         this.priority = priority;
-        this.index = 0;
     }
 
     @Override
