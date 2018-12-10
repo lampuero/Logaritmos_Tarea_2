@@ -43,11 +43,12 @@ public class Experiments {
             System.out.printf("Origen %d%n", origin);
             System.out.println("Empezando experimentos.");
             int experimentos = 20;
+            int calentamiento = 3;
             float[] tiempoNaive = new float[experimentos];
             float[] tiempoClassicHeap = new float[experimentos];
             float[] tiempoFibonacciHeap = new float[experimentos];
             System.out.println("Empezando calentamiento para implementacion Naive.");
-            for (int i = 0; i < 3 ; i++) {
+            for (int i = 0; i < calentamiento ; i++) {
                 ResultDijkstra res = Naive.algorithmDijkstra(origin, grafo);
             }
             System.out.println("Termino calentamiento.");
@@ -60,7 +61,7 @@ public class Experiments {
             }
 
             System.out.println("Empezando calentamiento para Classic Heap.");
-            for (int i = 0; i < 3 ; i++) {
+            for (int i = 0; i < calentamiento ; i++) {
                 ResultDijkstra res = ClassicHeap.algorithmDijkstra(origin, grafo);
             }
             System.out.println("Termino calentamiento.");
@@ -73,7 +74,7 @@ public class Experiments {
             }
 
             System.out.println("Empezando calentamiento para Fibonacci Heap.");
-            for (int i = 0; i < 3 ; i++) {
+            for (int i = 0; i < calentamiento ; i++) {
                 ResultDijkstra res = FibonacciHeap.algorithmDijkstra(origin, grafo);
             }
             System.out.println("Termino calentamiento.");
