@@ -4,13 +4,13 @@ import Other.Pair;
 import Other.ResultDijkstra;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FibonacciHeap {
 
 
     public static ResultDijkstra algorithmDijkstra(int origen, ArrayList<Pair>[] grafo){
         int n = grafo.length;
-        Nodo[] nodos = new Nodo[n];
         int[] dist = new int[n];
         Integer[] prev = new Integer[n];
         PriorityQueueWithFibonacciHeap queue = new PriorityQueueWithFibonacciHeap();
@@ -23,8 +23,7 @@ public class FibonacciHeap {
                 dist[i] = Integer.MAX_VALUE;
             }
             prev[i] = null;
-            nodos[i] = new Nodo(i, dist[i]);
-            queue.insert(nodos[i]);
+            queue.insert(i, dist[i]);
         }
 
         while (!queue.isEmpty()){
@@ -34,7 +33,7 @@ public class FibonacciHeap {
                 if (newpriority < dist[pair.vertice]){
                     dist[pair.vertice] = newpriority;
                     prev[pair.vertice] = m;
-                    queue.decreaseKey(nodos[pair.vertice], newpriority);
+                    queue.decreaseKey(pair.vertice, newpriority);
                 }
             }
         }
