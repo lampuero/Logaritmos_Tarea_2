@@ -1,15 +1,21 @@
 package FibonacciHeap;
 
+import java.util.HashMap;
+
 public class PriorityQueueWithFibonacciHeap {
     Nodo min;
     int n;
+    HashMap<Integer, Nodo> nodoHashMap;
 
     public PriorityQueueWithFibonacciHeap(){
         min = null;
         n = 0;
+        nodoHashMap  = new HashMap<>();
     }
 
-    public void insert(Nodo nodo) {
+    public void insert(int vertex, int priority) {
+        Nodo nodo = new Nodo(vertex, priority);
+        nodoHashMap.put(vertex, nodo);
         if (min == null){
             min = nodo;
         }
@@ -49,7 +55,8 @@ public class PriorityQueueWithFibonacciHeap {
                 consolidate();
             }
             n--;
-            return z.vertice;
+            nodoHashMap.remove(z.vertex);
+            return z.vertex;
         }
         return -1;
     }
@@ -154,13 +161,12 @@ public class PriorityQueueWithFibonacciHeap {
         } while (tmp != child);
     }
 
-
-
     public boolean isEmpty() {
         return min == null;
     }
 
-    public void decreaseKey(Nodo x, int newPriority) {
+    public void decreaseKey(int vertex, int newPriority) {
+        Nodo x = nodoHashMap.get(vertex);
         if (x.priority < newPriority){
             System.out.println("Error");
         }
@@ -222,10 +228,10 @@ class Nodo{
     boolean mark;
 
     int priority;
-    int vertice;
+    int vertex;
 
-    public Nodo(int vertice, int priority){
-        this.vertice = vertice;
+    public Nodo(int vertex, int priority){
+        this.vertex = vertex;
         this.priority = priority;
 
         degree = 0;
@@ -238,6 +244,6 @@ class Nodo{
 
     @Override
     public String toString() {
-        return String.format("(%d,%d)", vertice, priority);
+        return String.format("(%d,%d)", vertex, priority);
     }
 }
