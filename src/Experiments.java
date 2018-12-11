@@ -15,7 +15,7 @@ public class Experiments {
         long startProgram = System.currentTimeMillis();
         Random random = new Random();
         int n = 100000;
-        int[] muls = {10, 100};
+        int[] muls = {10, 50, 100};
         for (int mul: muls){
             System.out.printf("Empiezo con %dn\n", mul);
             int e = mul*n;
